@@ -1,6 +1,12 @@
 import PropTypes from 'prop-types';
 import Nav from 'react-bootstrap/Nav';
+import { Link } from "react-router-dom";
 import './Filter.scss';
+import {
+  ENDPOINT_ROOT,
+  ENDPOINT_MOS,
+  ENDPOINT_LENTA,
+} from '../../utils/constants';
 
 function Filter({ setFilter }) {
   function toggleFilter(value) {
@@ -9,15 +15,15 @@ function Filter({ setFilter }) {
   }
   return (
     <section className="filter">
-      <Nav className="filter__nav" defaultActiveKey="/home" as="ul">
+      <Nav className="filter__nav" defaultActiveKey={ENDPOINT_ROOT} as="ul">
         <Nav.Item as="li">
-          <Nav.Link href="/">Все</Nav.Link>
+          <Link to={ENDPOINT_ROOT}>Все</Link>
         </Nav.Item>
         <Nav.Item as="li">
-          <Nav.Link href="/lentaru">Lenta.ru</Nav.Link>
+          <Link to={ENDPOINT_LENTA}>Lenta.ru</Link>
         </Nav.Item>
         <Nav.Item as="li">
-          <Nav.Link href="/mosru">Mos.ru</Nav.Link>
+          <Link to={ENDPOINT_MOS}>Mos.ru</Link>
         </Nav.Item>
       </Nav>
       <div className="filter__sort">

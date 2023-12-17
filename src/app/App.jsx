@@ -21,7 +21,7 @@ function App() {
   );
 
   function filteredNews(inputSearch = '') {
-    if (pathname === '/mosru') {
+    if (pathname === ENDPOINT_MOS) {
       const filter = newsMos.filter(
         ({ title, description }) =>
           title.toLowerCase().includes(inputSearch.toLowerCase()) ||
@@ -29,7 +29,7 @@ function App() {
       );
       setNewsMos(filter);
     }
-    if (pathname === '/lentaru') {
+    if (pathname === ENDPOINT_LENTA) {
       const filter = newsLenta.filter(
         ({ title, description }) =>
           title.toLowerCase().includes(inputSearch.toLowerCase()) ||
