@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36px 0;
+  width: 100%;
+  &__update {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+  }
+  &__btn-update {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    background-image: url('../../assets/img/icon-upd.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    transition: .5s;
+  }
+  &__btn-update.rotate {
+    transform: rotate(180deg);
+  }
+}
