@@ -13,6 +13,7 @@ function Header({ onUpdate, onFilteredNews }) {
 
   function handleSubmit() {
     onFilteredNews(inputSearch);
+    setInputSearch('')
   }
 
   return (
@@ -25,9 +26,10 @@ function Header({ onUpdate, onFilteredNews }) {
         <div>
           <InputGroup className="header__search">
             <Form.Control
-            type="text"
+              type="text"
               placeholder=""
               aria-label="search-form"
+              value={inputSearch}
               onChange={handleInputChange}
             />
             <Button variant="outline-secondary" onClick={handleSubmit}>
