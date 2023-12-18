@@ -5,17 +5,19 @@ import './News.scss';
 function News({ card, filter }) {
   return (
     <Card>
-      <div className='card-body-wrapper'>
+      <div className="card-body-wrapper">
         {filter === 'line' ? (
-        <Card.Img variant="top" src={card?.enclosure?.link} />
-      ) : (
-        ''
-      )}
-      <Card.Body>
-        <Card.Title>{card.title}</Card.Title>
-        <Card.Text>{card.description}</Card.Text>
-        <Card.Link href={card.link}>Подробнее</Card.Link>
-      </Card.Body>
+          <div className="card-body-img">
+            <Card.Img variant="top" src={card?.enclosure?.link} />
+          </div>
+        ) : (
+          ''
+        )}
+        <Card.Body>
+          <Card.Title>{card.title}</Card.Title>
+          <Card.Text>{card.description}</Card.Text>
+          <Card.Link href={card.link}>Подробнее</Card.Link>
+        </Card.Body>
       </div>
       <Card.Footer className="text-muted">
         <p>{card.pubDate}</p>
