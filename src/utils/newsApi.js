@@ -1,7 +1,7 @@
 import { URL_MOS, URL_LENTA } from './constants';
 // const corsProxy = 'https://api.allorigins.win/get?url=';
-// const corsProxy = 'https://thingproxy.freeboard.io/fetch/';
-const corsProxy = 'https://api.codetabs.com/v1/proxy/?quest=';
+const corsProxy = 'https://thingproxy.freeboard.io/fetch/';
+// const corsProxy = 'https://api.codetabs.com/v1/proxy/?quest=';
 // const rssReader = 'https://tools.aimylogic.com/api/rss2json?&url=';
 const rssReader = 'https://api.rss2json.com/v1/api.json?rss_url=';
 

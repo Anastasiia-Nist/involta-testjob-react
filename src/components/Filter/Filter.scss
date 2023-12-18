@@ -9,4 +9,27 @@
     align-items: center;
     gap: 20px;
   }
+  &__sort {
+    display: flex;
+    gap: 10px;
+  }
+  &__btn {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    &_type_table {
+      background-image: url('../../assets/img/filter-table.svg'); //#0029FF
+    }
+    &_type_line {
+      background-image: url('../../assets/img/filter-line.svg');
+    }
+    &_type_table.active {
+      background-image: url('../../assets/img/filter-table-active.svg');
+       //#0029FF
+    }
+    &_type_line.active {
+      background-image: url('../../assets/img/filter-line-active.svg');
+    }
+  }
 }

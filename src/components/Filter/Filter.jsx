@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Nav from 'react-bootstrap/Nav';
-import { Link } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 import './Filter.scss';
 import {
   ENDPOINT_ROOT,
@@ -8,8 +9,8 @@ import {
   ENDPOINT_LENTA,
 } from '../../utils/constants';
 
-function Filter({ setFilter }) {
-  function toggleFilter(value) {
+function Filter({ setFilter, filter, }) {
+  function toggleFilter(event, value) {
     setFilter(value);
     localStorage.setItem('filter', value);
   }
@@ -27,13 +28,20 @@ function Filter({ setFilter }) {
         </Nav.Item>
       </Nav>
       <div className="filter__sort">
-        <button onClick={() => toggleFilter('table')} >Таблица</button>
-        <button onClick={() => toggleFilter('line')} >Список</button>
+        <Button  active={filter === 'table'}
+          className="filter__btn filter__btn_type_table"
+          onClick={(evn) => toggleFilter(evn, 'table')}
+        ></Button>
+        <Button active={filter === 'line'}
+          className="filter__btn filter__btn_type_line"
+          onClick={(evn) => toggleFilter(evn, 'line')}
+        ></Button>
       </div>
     </section>
   );
 }
 Filter.propTypes = {
   setFilter: PropTypes.func,
+  filter: PropTypes.string,
 };
 export default Filter;
