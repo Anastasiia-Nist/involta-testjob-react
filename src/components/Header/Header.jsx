@@ -13,9 +13,8 @@ function Header({ onUpdate, onFilteredNews }) {
 
   function handleSubmit() {
     onFilteredNews(inputSearch);
-    setInputSearch('')
+    setInputSearch('');
   }
-
   return (
     <>
       <header className="header">
@@ -43,7 +42,6 @@ function Header({ onUpdate, onFilteredNews }) {
 }
 Header.propTypes = {
   onUpdate: PropTypes.func,
-  onInputChange: PropTypes.func,
   onFilteredNews: PropTypes.func,
 };
 export default Header;

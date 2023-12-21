@@ -1,38 +1,55 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
 import './Filter.scss';
-import {
-  ENDPOINT_ROOT,
-  ENDPOINT_MOS,
-  ENDPOINT_LENTA,
-} from '../../utils/constants';
 
-function Filter({ setFilter, filter, }) {
-  function toggleFilter(event, value) {
+function Filter({ setFilter, filter, onFilteredNews, param }) {
+  const [activeBtn, setActiveBtn] = useState(param);
+  function toggleFilter(e, value) {
     setFilter(value);
     localStorage.setItem('filter', value);
   }
+  function handleFilterNews(e, value) {
+    setActiveBtn(value);
+    onFilteredNews(value);
+  }
   return (
     <section className="filter">
-      <Nav className="filter__nav" defaultActiveKey={ENDPOINT_ROOT} as="ul">
+      <Nav className="filter__nav" as="ul">
         <Nav.Item as="li">
-          <Link to={ENDPOINT_ROOT}>Все</Link>
+          <Button
+            active={activeBtn === 'all'}
+            onClick={(evn) => handleFilterNews(evn, 'all')}
+          >
+            {'Все'}
+          </Button>
         </Nav.Item>
         <Nav.Item as="li">
-          <Link to={ENDPOINT_LENTA}>Lenta.ru</Link>
+          <Button
+            active={activeBtn === 'lenta'}
+            onClick={(evn) => handleFilterNews(evn, 'lenta')}
+          >
+            {'Lenta.ru'}
+          </Button>
         </Nav.Item>
         <Nav.Item as="li">
-          <Link to={ENDPOINT_MOS}>Mos.ru</Link>
+          <Button
+            active={activeBtn === 'mos'}
+            onClick={(evn) => handleFilterNews(evn, 'mos')}
+          >
+            {'Mos.ru'}
+          </Button>
         </Nav.Item>
       </Nav>
       <div className="filter__sort">
-        <Button  active={filter === 'table'}
+        <Button
+          active={filter === 'table'}
           className="filter__btn filter__btn_type_table"
           onClick={(evn) => toggleFilter(evn, 'table')}
         ></Button>
-        <Button active={filter === 'line'}
+        <Button
+          active={filter === 'line'}
           className="filter__btn filter__btn_type_line"
           onClick={(evn) => toggleFilter(evn, 'line')}
         ></Button>
@@ -43,5 +60,7 @@ function Filter({ setFilter, filter, }) {
 Filter.propTypes = {
   setFilter: PropTypes.func,
   filter: PropTypes.string,
+  onFilteredNews: PropTypes.func,
+  param:  PropTypes.string,
 };
 export default Filter;

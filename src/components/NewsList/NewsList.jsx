@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
 import ListGroup from 'react-bootstrap/ListGroup';
 import News from '../News/News';
 import NewsPagination from '../Pagination/Pagination';
@@ -24,7 +23,7 @@ function NewsList({ cards, filter, onLoading }) {
   return (
     <>
       {onLoading ? (
-        <Spinner animation="border" role="status"></Spinner>
+        <p>...Загрузка</p>
       ) : (
         <>
           <div>

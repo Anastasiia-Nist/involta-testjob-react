@@ -1,52 +1,90 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import Filter from '../components/Filter/Filter';
 import NewsList from '../components/NewsList/NewsList';
 import newsApi from '../utils/NewsApi';
-import {
-  ENDPOINT_ROOT,
-  ENDPOINT_MOS,
-  ENDPOINT_LENTA,
-} from '../utils/constants';
 
 function App() {
-  // const { pathname } = useLocation();
-  const [newsMos, setNewsMos] = useState([]);
-  const [newsLenta, setNewsLenta] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [newsParam, setNewsParam] = useState(searchParams.get('news') || '');
+  const [searchParam, setSearchParam] = useState(
+    searchParams.get('search') || ''
+  );
   const [allNews, setAllNews] = useState([]);
+  const [filterNews, setFilterNews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState(
     localStorage.getItem('filter') || 'table'
   );
 
-  function filteredNews(inputSearch = '') {
-    const mosNews = JSON.parse(localStorage.getItem('filterMosNews') ?? []);
-    const lentaNews = JSON.parse(localStorage.getItem('filterLentaNews') ?? []);
-
-    const filterMosNews = mosNews.filter(
+  function filteredNewsBySearch(inputSearch) {
+    const filter = allNews.filter(
       ({ title, description }) =>
         title.toLowerCase().includes(inputSearch.toLowerCase()) ||
         description.toLowerCase().includes(inputSearch.toLowerCase())
     );
-    setNewsMos(filterMosNews);
+    setFilterNews(filter);
+    setSearchParam(inputSearch);
+    searchParams.set('search', inputSearch);
+    navigate(`/?${searchParams.toString()}`);
+  }
 
-    const filterLentaNews = lentaNews.filter(
-      ({ title, description }) =>
-        title.toLowerCase().includes(inputSearch.toLowerCase()) ||
-        description.toLowerCase().includes(inputSearch.toLowerCase())
-    );
-    setNewsLenta(filterLentaNews);
-
-    const filter = [...mosNews, ...lentaNews].filter(
-      ({ title, description }) =>
-        title.toLowerCase().includes(inputSearch.toLowerCase()) ||
-        description.toLowerCase().includes(inputSearch.toLowerCase())
-    );
-    setAllNews(filter);
+  function filteredNewsByType(typeNews) {
+    const searchParam = searchParams.get('search');
+    if (searchParam) {
+      if (typeNews === 'all') {
+        const filter = allNews.filter(
+          ({ title, description }) =>
+            title.toLowerCase().includes(searchParam.toLowerCase()) ||
+            description.toLowerCase().includes(searchParam.toLowerCase())
+        );
+        setFilterNews(filter);
+      }
+      if (typeNews === 'lenta') {
+        const filter = allNews.filter(
+          ({ title, description, link }) =>
+            link.toLowerCase().includes(typeNews.toLowerCase()) &&
+            (title.toLowerCase().includes(searchParam.toLowerCase()) ||
+              description.toLowerCase().includes(searchParam.toLowerCase()))
+        );
+        setFilterNews(filter);
+      }
+      if (typeNews === 'mos') {
+        const filter = allNews.filter(
+          ({ title, description, link }) =>
+            link.toLowerCase().includes('mk'.toLowerCase()) &&
+            (title.toLowerCase().includes(searchParam.toLowerCase()) ||
+              description.toLowerCase().includes(searchParam.toLowerCase()))
+        );
+        setFilterNews(filter);
+      }
+    } else {
+      if (typeNews === 'all') setFilterNews(allNews);
+      if (typeNews === 'lenta') {
+        const filter = allNews.filter(({ link }) =>
+          link.toLowerCase().includes(typeNews.toLowerCase())
+        );
+        setFilterNews(filter);
+      }
+      if (typeNews === 'mos') {
+        const filter = allNews.filter(({ link }) =>
+          link.toLowerCase().includes('mk'.toLowerCase())
+        );
+        setFilterNews(filter);
+      }
+    }
+    setNewsParam(typeNews);
+    searchParams.set('news', typeNews);
+    navigate(`/?${searchParams.toString()}`);
   }
 
   function updateNews(evn) {
+    searchParams.delete('news');
+    searchParams.delete('search');
+    searchParams.delete('page');
+    setSearchParams(searchParams);
     getAllNews();
     evn.target.classList.toggle('rotate');
   }
@@ -54,48 +92,27 @@ function App() {
     setIsLoading(true);
     Promise.all([newsApi.getNewsMos(), newsApi.getNewsLenta()])
       .then(([mos, lenta]) => {
-        localStorage.setItem('filterMosNews', JSON.stringify(mos.items));
-        localStorage.setItem('filterLentaNews', JSON.stringify(lenta.items));
         setAllNews([...mos.items, ...lenta.items]);
-        setNewsMos(mos.items);
-        setNewsLenta(lenta.items);
+        setFilterNews([...mos.items, ...lenta.items]);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
   }
   useEffect(() => {
     getAllNews();
+    filteredNewsByType(searchParams.get('news'));
   }, []);
 
   return (
     <>
-      <Header
-        onUpdate={updateNews}
-        onFilteredNews={filteredNews}
-        newsMos={newsMos}
-        newsLenta={newsLenta}
+      <Header onUpdate={updateNews} onFilteredNews={filteredNewsBySearch} />
+      <Filter
+        setFilter={setFilter}
+        filter={filter}
+        onFilteredNews={filteredNewsByType}
+        param={newsParam}
       />
-      <Filter setFilter={setFilter} filter={filter}/>
-      <Routes>
-        <Route
-          path={ENDPOINT_ROOT}
-          element={
-            <NewsList cards={allNews} filter={filter} onLoading={isLoading} />
-          }
-        />
-        <Route
-          path={ENDPOINT_MOS}
-          element={
-            <NewsList cards={newsMos} filter={filter} onLoading={isLoading} />
-          }
-        />
-        <Route
-          path={ENDPOINT_LENTA}
-          element={
-            <NewsList cards={newsLenta} filter={filter} onLoading={isLoading} />
-          }
-        />
-      </Routes>
+      <NewsList cards={filterNews} filter={filter} onLoading={isLoading} />
     </>
   );
 }

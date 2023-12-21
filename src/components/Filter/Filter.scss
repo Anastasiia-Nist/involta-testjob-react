@@ -8,6 +8,18 @@
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    list-style: none;
+    .nav-item {
+      button {
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+      }
+      button.active {
+        background-color: #0029ff;
+        color: #fff;
+      }
+    }
   }
   &__sort {
     display: flex;
